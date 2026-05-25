@@ -99,12 +99,11 @@ function renderSignedIn(visitors) {
   }
 
   grid.innerHTML = visitors.map(p => `
-    <div class="person-card">
+    <a class="person-card" href="?page=visitor_detail&id=${parseInt(p.visitor_id)}" style="text-decoration:none;color:inherit;display:block;">
       <div class="person-name">${esc(p.first_name + ' ' + p.last_name)}</div>
       <div class="person-meta">${p.id_number ? 'ID: ' + esc(p.id_number) : 'Guest: ' + esc(p.contact_number)}</div>
       <div class="person-time">Since ${fmtTime(p.sign_in)}</div>
-      <button class="sign-out-btn" onclick="signOutPerson(${parseInt(p.id)})">Sign Out</button>
-    </div>
+    </a>
   `).join('');
 }
 
