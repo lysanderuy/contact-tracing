@@ -29,17 +29,17 @@ include __DIR__ . '/../includes/header.php';
   </div>
 
   <button class="btn-main" id="confirm-btn" onclick="handleConfirm()">
+    Confirm
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
       <polyline points="22 4 12 14.01 9 11.01"/>
     </svg>
-    Confirm
   </button>
 
-  <button class="btn-guest btn-guest-secondary" onclick="window.location.href='?page=home'">
+  <button class="btn-guest" onclick="window.location.href='?page=home'">
     <div class="g-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
+        <path d="M18 6L6 18M6 6l12 12"/>
       </svg>
     </div>
     <div class="g-body">
