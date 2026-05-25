@@ -19,13 +19,22 @@ function renderVerify(v) {
   const action      = isSignedIn ? 'sign_out' : 'sign_in';
   const actionLabel = isSignedIn ? 'Sign Out' : 'Sign In';
 
-  document.getElementById('v-name').textContent =
-    [v.first_name, v.middle_name, v.last_name].filter(Boolean).join(' ');
+  const fullName = [v.first_name, v.middle_name, v.last_name].filter(Boolean).join(' ');
+  const initials = v.first_name && v.last_name
+    ? (v.first_name[0] + v.last_name[0]).toUpperCase()
+    : '??';
+
+  document.getElementById('v-avatar').textContent = initials;
+  document.getElementById('v-name').textContent = fullName;
   document.getElementById('v-id-type').textContent =
     v.id_number ? 'USC ID: ' + v.id_number : 'Guest';
-  document.getElementById('v-status').textContent = isSignedIn ? 'Signed In' : 'Signed Out';
-  document.getElementById('confirm-btn').innerHTML =
-    document.getElementById('confirm-btn').innerHTML.replace('Confirm', 'Confirm & ' + actionLabel);
+
+  const statusText = isSignedIn ? 'Signed In' : 'Signed Out';
+  document.getElementById('v-status').textContent = statusText;
+  document.getElementById('confirm-btn-text').textContent = 'Confirm & ' + actionLabel;
+
+  const statusBox = document.getElementById('verify-status-box');
+  statusBox.className = 'verify-status ' + (isSignedIn ? 'status-in' : 'status-out');
 
   const grid = document.getElementById('v-info-grid');
   const infoItems = [
@@ -35,9 +44,9 @@ function renderVerify(v) {
   ].filter(Boolean);
 
   grid.innerHTML = infoItems.map(([label, val]) => `
-    <div>
-      <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;">${label}</div>
-      <div style="font-size:13px;color:var(--text-primary);">${val}</div>
+    <div class="verify-info-item">
+      <div class="verify-info-label">${label}</div>
+      <div class="verify-info-value">${val}</div>
     </div>
   `).join('');
 

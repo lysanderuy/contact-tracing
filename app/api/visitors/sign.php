@@ -14,12 +14,6 @@ if (!$visitor_id || !in_array($action, ['sign_in', 'sign_out'], true)) {
     exit;
 }
 
-// Require admin session for sign_out (admin action)
-if ($action === 'sign_out' && !isset($_SESSION['admin_id'])) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized']);
-    exit;
-}
 
 try {
     if ($action === 'sign_in') {

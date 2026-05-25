@@ -7,7 +7,7 @@ include __DIR__ . '/../includes/header.php';
 
 <div class="welcome">
   <h1>Verify <span>Information</span></h1>
-  <p>Please confirm your details before proceeding.</p>
+  <p>Confirm your details before proceeding.</p>
 </div>
 
 <div id="verify-loading" class="card verify-loading">
@@ -16,37 +16,34 @@ include __DIR__ . '/../includes/header.php';
 
 <div id="verify-content" class="card verify-content">
   <div class="verify-header">
-    <div class="verify-name" id="v-name"></div>
-    <div class="verify-id-type" id="v-id-type"></div>
+    <div class="verify-avatar" id="v-avatar"></div>
+    <div class="verify-name-section">
+      <div class="verify-name" id="v-name"></div>
+      <div class="verify-id-type" id="v-id-type"></div>
+    </div>
   </div>
 
   <div class="verify-info-grid" id="v-info-grid"></div>
 
-  <div class="verify-status">
+  <div class="verify-status" id="verify-status-box">
     <div class="verify-status-text">
-      Current Status: <strong id="v-status"></strong>
+      <span id="v-status-label">Current Status:</span> <strong id="v-status"></strong>
     </div>
   </div>
 
   <button class="btn-main" id="confirm-btn" onclick="handleConfirm()">
-    Confirm
+    <span id="confirm-btn-text">Confirm</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-      <polyline points="22 4 12 14.01 9 11.01"/>
+      <path d="M5 12h14M12 5l7 7-7 7"/>
     </svg>
   </button>
 
-  <button class="btn-guest" onclick="window.location.href='?page=home'">
-    <div class="g-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 6L6 18M6 6l12 12"/>
-      </svg>
-    </div>
-    <div class="g-body">
-      <div class="g-title">Cancel</div>
-      <div class="g-hint">Return to home</div>
-    </div>
-  </button>
+  <a class="back-link" href="?page=home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    Back to Home
+  </a>
 </div>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
