@@ -1,5 +1,8 @@
-// Restore filters from URL params on load
+let currentPage = 1;
+let totalPages = 1;
+
 const urlParams = new URLSearchParams(window.location.search);
+currentPage = parseInt(urlParams.get('page') || '1');
 document.getElementById('search-input').value   = urlParams.get('search') || '';
 document.getElementById('filter-select').value  = urlParams.get('filter') || 'all';
 document.getElementById('date-from').value       = urlParams.get('date_from') || '';
@@ -11,13 +14,49 @@ fetchVisitors();
 
 document.getElementById('filter-form').addEventListener('submit', function (e) {
   e.preventDefault();
-  fetchVisitors();
+  currentPage = 1;
+  fetchVisitors(1);
 });
 
 document.getElementById('filter-select').addEventListener('change', function () {
   toggleDateRange();
-  if (this.value !== 'date_range') fetchVisitors();
+  if (this.value !== 'date_range') {
+    currentPage = 1;
+    fetchVisitors(1);
+  }
 });
+
+function renderPagination() {
+  const container = document.getElementById('pagination-container');
+  if (!container) return;
+
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  let html = '<div class="pagination">';
+  html += `<a href="#" class="page-arrow ${currentPage === 1 ? 'disabled' : ''}" onclick="goToPage(${currentPage - 1}); return false;">&lt;</a>`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+      html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      html += '<span class="page-ellipsis">...</span>';
+    }
+  }
+
+  html += `<a href="#" class="page-arrow ${currentPage === totalPages ? 'disabled' : ''}" onclick="goToPage(${currentPage + 1}); return false;">&gt;</a>`;
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+function goToPage(page) {
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  fetchVisitors(page);
+}
 
 function toggleDateRange() {
   const show = document.getElementById('filter-select').value === 'date_range';
@@ -31,16 +70,22 @@ function fetchSignedIn() {
     .catch(() => {});
 }
 
-function fetchVisitors() {
+function fetchVisitors(page = 1) {
   const search     = document.getElementById('search-input').value.trim();
   const filter     = document.getElementById('filter-select').value;
   const date_from  = document.getElementById('date-from').value;
   const date_to    = document.getElementById('date-to').value;
 
-  const q = new URLSearchParams({ search, filter, date_from, date_to }).toString();
+  const q = new URLSearchParams({ search, filter, date_from, date_to, page }).toString();
   fetch('?api=admin/visitors&' + q)
     .then(res => res.json())
-    .then(data => renderVisitors(Array.isArray(data) ? data : []))
+    .then(data => {
+      const visitors = Array.isArray(data.data) ? data.data : [];
+      currentPage = data.page || 1;
+      totalPages = data.total_pages || 1;
+      renderVisitors(visitors);
+      renderPagination();
+    })
     .catch(() => {});
 }
 
@@ -54,12 +99,11 @@ function renderSignedIn(visitors) {
   }
 
   grid.innerHTML = visitors.map(p => `
-    <div class="person-card">
+    <a class="person-card" href="?page=visitor_detail&id=${parseInt(p.visitor_id)}" style="text-decoration:none;color:inherit;display:block;">
       <div class="person-name">${esc(p.first_name + ' ' + p.last_name)}</div>
       <div class="person-meta">${p.id_number ? 'ID: ' + esc(p.id_number) : 'Guest: ' + esc(p.contact_number)}</div>
       <div class="person-time">Since ${fmtTime(p.sign_in)}</div>
-      <button class="sign-out-btn" onclick="signOutPerson(${parseInt(p.id)})">Sign Out</button>
-    </div>
+    </a>
   `).join('');
 }
 
@@ -82,14 +126,32 @@ function renderVisitors(logs) {
         <td>${fmtDateTime(log.sign_in)}</td>
         <td>${log.sign_out ? fmtDateTime(log.sign_out) : '—'}</td>
         <td><span class="status-badge ${isOut ? 'status-out' : 'status-in'}">${isOut ? 'Out' : 'In'}</span></td>
-        <td>
-          <a class="view-link" href="?page=visitor_detail&id=${parseInt(log.visitor_id)}">View</a>
-          ${!isOut ? `<button class="sign-out-btn" style="padding:4px 8px;font-size:10px;" onclick="signOutPerson(${parseInt(log.visitor_id)})">Sign Out</button>` : ''}
+        <td style="position:relative;">
+          <a href="#" class="dots-link" onclick="toggleMenu(${log.visitor_id}); return false;">···</a>
+          <div id="menu-${log.visitor_id}" class="action-menu" style="display:none;">
+            <a href="?page=visitor_detail&id=${parseInt(log.visitor_id)}">View</a>
+            ${!isOut ? `<a href="#" onclick="signOutPerson(${parseInt(log.visitor_id)}); return false;">Sign Out</a>` : ''}
+          </div>
         </td>
       </tr>
     `;
   }).join('');
 }
+
+function toggleMenu(visitorId) {
+  const menu = document.getElementById(`menu-${visitorId}`);
+  const allMenus = document.querySelectorAll('.action-menu');
+  allMenus.forEach(m => {
+    if (m.id !== `menu-${visitorId}`) m.style.display = 'none';
+  });
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.dots-link')) {
+    document.querySelectorAll('.action-menu').forEach(m => m.style.display = 'none');
+  }
+});
 
 function signOutPerson(visitorId) {
   if (!confirm('Sign out this visitor?')) return;
@@ -102,7 +164,7 @@ function signOutPerson(visitorId) {
     .then(data => {
       if (data.success) {
         fetchSignedIn();
-        fetchVisitors();
+        fetchVisitors(currentPage);
       } else {
         alert(data.error || 'Failed to sign out');
       }

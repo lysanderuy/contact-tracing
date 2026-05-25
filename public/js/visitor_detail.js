@@ -42,27 +42,29 @@ function renderDetail({ visitor: v, logs, first_visit, currently_signed_in }) {
 
   // Visit history
   document.getElementById('history-tbody').innerHTML = logs.map(log => {
-    let duration = '';
+    const signInDate = fmtDate(log.sign_in);
+    const signInTime = fmtTime(log.sign_in);
+    let signOut = '—';
+    let duration = '—';
     if (log.sign_out) {
+      signOut = fmtTime(log.sign_out);
       const diff = new Date(log.sign_out) - new Date(log.sign_in);
       const h = Math.floor(diff / 3600000);
       const m = Math.floor((diff % 3600000) / 60000);
       duration = h + 'h ' + m + 'm';
-    } else {
-      duration = '<em>Active</em>';
     }
     return `
       <tr>
-        <td>${fmtDateTimeWithYear(log.sign_in)}</td>
-        <td>${log.sign_out ? fmtDateTimeWithYear(log.sign_out) : '<em>Current</em>'}</td>
+        <td>${signInDate}</td>
+        <td>${signInTime}</td>
+        <td>${signOut}</td>
         <td>${duration}</td>
-        <td>${esc(log.location || 'CpE Office')}</td>
       </tr>
     `;
   }).join('');
 
   document.getElementById('detail-loading').style.display = 'none';
-  document.getElementById('detail-content').style.display = '';
+  document.getElementById('detail-content').classList.remove('hidden');
 }
 
 function signOutVisitor() {
