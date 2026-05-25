@@ -44,4 +44,3 @@ main { padding: 32px 40px; max-width: 900px; margin: 0 auto; }
 .sign-out-btn { padding: 10px 20px; font-size: 13px; font-weight: 500; border-radius: 8px; }
 
 .detail-loading { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
-.hidden { display: none; }

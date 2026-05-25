@@ -60,7 +60,7 @@ include __DIR__ . '/../includes/header.php';
             <th>Sign In</th>
             <th>Sign Out</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="visitor-tbody">

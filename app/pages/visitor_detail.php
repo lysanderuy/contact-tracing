@@ -12,6 +12,7 @@ $css_files  = ['admin.css', 'visitor_detail.css'];
 $topbar_btn = ['back', '?page=admin_dashboard', '← Back to Dashboard'];
 $page_js    = ['js/visitor_detail.js'];
 $skip_main  = true;
+$skip_footer = true;
 include __DIR__ . '/../includes/header.php';
 ?>
 
@@ -41,10 +42,10 @@ include __DIR__ . '/../includes/header.php';
       <table class="history-table">
         <thead>
           <tr>
+            <th>Date</th>
             <th>Sign In</th>
             <th>Sign Out</th>
             <th>Duration</th>
-            <th>Location</th>
           </tr>
         </thead>
         <tbody id="history-tbody"></tbody>

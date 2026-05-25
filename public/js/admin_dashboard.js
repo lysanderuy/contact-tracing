@@ -36,7 +36,7 @@ function renderPagination() {
   }
 
   let html = '<div class="pagination">';
-  html += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>`;
+  html += `<a href="#" class="page-arrow ${currentPage === 1 ? 'disabled' : ''}" onclick="goToPage(${currentPage - 1}); return false;">&lt;</a>`;
 
   for (let i = 1; i <= totalPages; i++) {
     if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
@@ -46,7 +46,7 @@ function renderPagination() {
     }
   }
 
-  html += `<button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`;
+  html += `<a href="#" class="page-arrow ${currentPage === totalPages ? 'disabled' : ''}" onclick="goToPage(${currentPage + 1}); return false;">&gt;</a>`;
   html += '</div>';
 
   container.innerHTML = html;
@@ -126,14 +126,32 @@ function renderVisitors(logs) {
         <td>${fmtDateTime(log.sign_in)}</td>
         <td>${log.sign_out ? fmtDateTime(log.sign_out) : '—'}</td>
         <td><span class="status-badge ${isOut ? 'status-out' : 'status-in'}">${isOut ? 'Out' : 'In'}</span></td>
-        <td>
-          <a class="view-link" href="?page=visitor_detail&id=${parseInt(log.visitor_id)}">View</a>
-          ${!isOut ? `<button class="sign-out-btn" style="padding:4px 8px;font-size:10px;" onclick="signOutPerson(${parseInt(log.visitor_id)})">Sign Out</button>` : ''}
+        <td style="position:relative;">
+          <a href="#" class="dots-link" onclick="toggleMenu(${log.visitor_id}); return false;">···</a>
+          <div id="menu-${log.visitor_id}" class="action-menu" style="display:none;">
+            <a href="?page=visitor_detail&id=${parseInt(log.visitor_id)}">View</a>
+            ${!isOut ? `<a href="#" onclick="signOutPerson(${parseInt(log.visitor_id)}); return false;">Sign Out</a>` : ''}
+          </div>
         </td>
       </tr>
     `;
   }).join('');
 }
+
+function toggleMenu(visitorId) {
+  const menu = document.getElementById(`menu-${visitorId}`);
+  const allMenus = document.querySelectorAll('.action-menu');
+  allMenus.forEach(m => {
+    if (m.id !== `menu-${visitorId}`) m.style.display = 'none';
+  });
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.dots-link')) {
+    document.querySelectorAll('.action-menu').forEach(m => m.style.display = 'none');
+  }
+});
 
 function signOutPerson(visitorId) {
   if (!confirm('Sign out this visitor?')) return;
