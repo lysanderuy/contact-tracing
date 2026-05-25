@@ -1,0 +1,47 @@
+main { padding: 32px 40px; max-width: 900px; margin: 0 auto; }
+
+.back-link {
+  padding: 8px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.back-link:hover { background: var(--blue-50); }
+
+.card { padding: 24px; margin-bottom: 24px; }
+.card-title {
+  font-size: 14px; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.profile-header { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 20px; }
+.avatar {
+  width: 56px; height: 56px;
+  background: var(--blue-500);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 20px; font-weight: 600;
+}
+.profile-info h2 { font-size: 20px; font-weight: 600; color: var(--text-primary); }
+.profile-info .meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.profile-info .status-badge { display: inline-block; margin-top: 8px; padding: 4px 10px; }
+
+.info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.info-item { padding: 12px; background: var(--surface-2); border-radius: 10px; }
+.info-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.info-value { font-size: 13px; color: var(--text-primary); }
+
+.history-table { width: 100%; border-collapse: collapse; }
+.history-table th,
+.history-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.history-table th { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+.history-table td { font-size: 13px; color: var(--text-primary); }
+.history-table tr:hover { background: var(--blue-50); }
+
+.sign-out-btn { padding: 10px 20px; font-size: 13px; font-weight: 500; border-radius: 8px; }
+
+.detail-loading { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
+.hidden { display: none; }
