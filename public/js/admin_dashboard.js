@@ -1,29 +1,107 @@
 let currentPage = 1;
 let totalPages = 1;
 
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function fmtTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
+function fmtDateTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleString('en-PH', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
 const urlParams = new URLSearchParams(window.location.search);
 currentPage = parseInt(urlParams.get('page') || '1');
-document.getElementById('search-input').value   = urlParams.get('search') || '';
-document.getElementById('filter-select').value  = urlParams.get('filter') || 'all';
-document.getElementById('date-from').value       = urlParams.get('date_from') || '';
-document.getElementById('date-to').value         = urlParams.get('date_to') || '';
-toggleDateRange();
+document.getElementById('search-input').value = urlParams.get('search') || '';
+
+const filterOptions = {
+  all: 'All Time',
+  signed_in: 'Currently Signed In',
+  signed_out: 'Signed Out',
+  today: 'Today',
+  this_week: 'This Week',
+  this_month: 'This Month'
+};
+
+const visitorTypeOptions = {
+  all: 'All Visitors',
+  usc: 'USC',
+  guest: 'Guest'
+};
+
+const initialFilter = urlParams.get('filter') || 'all';
+const initialVisitorType = urlParams.get('visitor_type') || 'all';
+
+document.getElementById('filter-value').value = initialFilter;
+document.getElementById('visitor-type-value').value = initialVisitorType;
+document.getElementById('filter-label').textContent = filterOptions[initialFilter];
+document.getElementById('visitor-type-label').textContent = visitorTypeOptions[initialVisitorType];
+
+markActiveDropdownItem('filter-menu', initialFilter);
+markActiveDropdownItem('visitor-type-menu', initialVisitorType);
 
 fetchSignedIn();
 fetchVisitors();
+
+function markActiveDropdownItem(menuId, value) {
+  const menu = document.getElementById(menuId);
+  menu.querySelectorAll('.dropdown-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.value === value);
+  });
+}
+
+function setupDropdown(btnId, menuId, hiddenInputId, labelId, optionsObj) {
+  const btn = document.getElementById(btnId);
+  const menu = document.getElementById(menuId);
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.dropdown-btn').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling?.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      menu.classList.add('open');
+    }
+  });
+
+  menu.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const value = item.dataset.value;
+      document.getElementById(hiddenInputId).value = value;
+      document.getElementById(labelId).textContent = optionsObj[value];
+      markActiveDropdownItem(menuId, value);
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+      currentPage = 1;
+      fetchVisitors(1);
+    });
+  });
+}
+
+setupDropdown('filter-btn', 'filter-menu', 'filter-value', 'filter-label', filterOptions);
+setupDropdown('visitor-type-btn', 'visitor-type-menu', 'visitor-type-value', 'visitor-type-label', visitorTypeOptions);
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.dropdown-btn').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+});
 
 document.getElementById('filter-form').addEventListener('submit', function (e) {
   e.preventDefault();
   currentPage = 1;
   fetchVisitors(1);
-});
-
-document.getElementById('filter-select').addEventListener('change', function () {
-  toggleDateRange();
-  if (this.value !== 'date_range') {
-    currentPage = 1;
-    fetchVisitors(1);
-  }
 });
 
 function renderPagination() {
@@ -36,7 +114,7 @@ function renderPagination() {
   }
 
   let html = '<div class="pagination">';
-  html += `<a href="#" class="page-arrow ${currentPage === 1 ? 'disabled' : ''}" onclick="goToPage(${currentPage - 1}); return false;">&lt;</a>`;
+  html += `<a href="#" class="page-arrow ${currentPage === 1 ? 'disabled' : ''}" onclick="goToPage(${currentPage - 1}); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>`;
 
   for (let i = 1; i <= totalPages; i++) {
     if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
@@ -46,7 +124,7 @@ function renderPagination() {
     }
   }
 
-  html += `<a href="#" class="page-arrow ${currentPage === totalPages ? 'disabled' : ''}" onclick="goToPage(${currentPage + 1}); return false;">&gt;</a>`;
+  html += `<a href="#" class="page-arrow ${currentPage === totalPages ? 'disabled' : ''}" onclick="goToPage(${currentPage + 1}); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></a>`;
   html += '</div>';
 
   container.innerHTML = html;
@@ -58,10 +136,6 @@ function goToPage(page) {
   fetchVisitors(page);
 }
 
-function toggleDateRange() {
-  const show = document.getElementById('filter-select').value === 'date_range';
-  document.getElementById('date-range-inputs').style.display = show ? '' : 'none';
-}
 
 function fetchSignedIn() {
   fetch('?api=admin/signed_in')
@@ -71,12 +145,11 @@ function fetchSignedIn() {
 }
 
 function fetchVisitors(page = 1) {
-  const search     = document.getElementById('search-input').value.trim();
-  const filter     = document.getElementById('filter-select').value;
-  const date_from  = document.getElementById('date-from').value;
-  const date_to    = document.getElementById('date-to').value;
+  const search       = document.getElementById('search-input').value.trim();
+  const filter       = document.getElementById('filter-value').value;
+  const visitor_type = document.getElementById('visitor-type-value').value;
 
-  const q = new URLSearchParams({ search, filter, date_from, date_to, page }).toString();
+  const q = new URLSearchParams({ search, filter, visitor_type, page }).toString();
   fetch('?api=admin/visitors&' + q)
     .then(res => res.json())
     .then(data => {
@@ -129,8 +202,8 @@ function renderVisitors(logs) {
         <td style="position:relative;">
           <a href="#" class="dots-link" onclick="toggleMenu(${log.visitor_id}); return false;">···</a>
           <div id="menu-${log.visitor_id}" class="action-menu" style="display:none;">
-            <a href="?page=visitor_detail&id=${parseInt(log.visitor_id)}">View</a>
-            ${!isOut ? `<a href="#" onclick="signOutPerson(${parseInt(log.visitor_id)}); return false;">Sign Out</a>` : ''}
+            <a href="?page=visitor_detail&id=${parseInt(log.visitor_id)}">View Visitor</a>
+            ${!isOut ? `<a href="#" onclick="signOutPerson(${parseInt(log.visitor_id)}); return false;">Mark Signed Out</a>` : ''}
           </div>
         </td>
       </tr>
