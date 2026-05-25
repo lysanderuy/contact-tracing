@@ -1,0 +1,43 @@
+function handleRegister() {
+  const first = document.getElementById('reg-first').value.trim();
+  const last = document.getElementById('reg-last').value.trim();
+  const contact = normalizeContact(document.getElementById('reg-contact').value.trim());
+
+  if (!first || !last) {
+    alert('First name and last name are required');
+    return;
+  }
+  if (!contact || contact.length < 10) {
+    alert('Please enter a valid contact number');
+    return;
+  }
+
+  const payload = {
+    first_name: first,
+    middle_name: document.getElementById('reg-middle').value.trim() || null,
+    last_name: last,
+    barangay: document.getElementById('reg-brgy').value.trim() || null,
+    city: document.getElementById('reg-city').value.trim() || null,
+    province: document.getElementById('reg-prov').value.trim() || null,
+    contact_number: contact,
+    email: document.getElementById('reg-email').value.trim() || null
+  };
+
+  const idEl = document.getElementById('reg-id');
+  if (idEl) payload.id_number = idEl.value.trim();
+
+  fetch('?api=visitors/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) { alert(data.error); return; }
+    window.location.href = '?page=confirmation&visitor_id=' + data.visitor_id + '&action=signed_in';
+  })
+  .catch(err => { console.error(err); alert('System error. Please try again.'); });
+}
+
+const firstEmpty = Array.from(document.querySelectorAll('input:not([readonly])')).find(i => !i.value);
+if (firstEmpty) firstEmpty.focus();
