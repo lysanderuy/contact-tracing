@@ -17,6 +17,7 @@ $css_files  = ['admin.css', 'admin_login.css'];
 $page_js    = ['js/admin_login.js'];
 $skip_header = true;
 $skip_main   = true;
+$skip_footer = true;
 include __DIR__ . '/../includes/header.php';
 ?>
 

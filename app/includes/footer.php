@@ -1,4 +1,5 @@
   </main>
+  <?php if (empty($skip_footer)): ?>
   <footer>
     <span class="f-copy">CpE Contact Tracing · University of San Carlos</span>
     <a class="f-admin" href="?page=admin_login">
@@ -9,6 +10,7 @@
       Admin access
     </a>
   </footer>
+  <?php endif; ?>
   <script src="js/utils.js"></script>
   <?php if (!empty($page_js)): ?>
     <?php foreach ((array)$page_js as $js): ?>

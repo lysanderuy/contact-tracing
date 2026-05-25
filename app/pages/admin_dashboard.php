@@ -6,6 +6,7 @@ $css_files  = ['admin.css', 'admin_dashboard.css'];
 $topbar_btn = 'logout';
 $page_js    = ['js/admin_dashboard.js'];
 $skip_main  = true;
+$skip_footer = true;
 include __DIR__ . '/../includes/header.php';
 ?>
 
