@@ -68,6 +68,8 @@ contact-tracing/
 ├── database/
 │   └── schema.sql
 ├── public/
+│   ├── assets/
+│   │   └── dcpe_logo.png
 │   ├── css/
 │   │   ├── admin.css
 │   │   ├── admin_dashboard.css

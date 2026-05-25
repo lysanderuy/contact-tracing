@@ -19,7 +19,7 @@ function renderDetail({ visitor: v, logs, first_visit, currently_signed_in }) {
 
   const badge = document.getElementById('visitor-status-badge');
   badge.textContent = currently_signed_in ? 'Currently Signed In' : 'Not Inside';
-  badge.className   = 'status-badge ' + (currently_signed_in ? 'status-in' : 'status-out');
+  badge.className = 'status-badge ' + (currently_signed_in ? 'status-in' : 'status-out');
 
   const infoItems = [
     ['Contact Number', v.contact_number],
@@ -37,7 +37,7 @@ function renderDetail({ visitor: v, logs, first_visit, currently_signed_in }) {
 
   if (currently_signed_in) {
     document.getElementById('sign-out-container').innerHTML =
-      `<button class="sign-out-btn" onclick="signOutVisitor()" style="margin-top:20px;">Sign Out Now</button>`;
+      `<button class="sign-out-btn" onclick="signOutVisitor()">Mark Signed Out</button>`;
   }
 
   // Visit history

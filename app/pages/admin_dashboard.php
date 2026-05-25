@@ -30,6 +30,8 @@ include __DIR__ . '/../includes/header.php';
 
     <form id="filter-form" class="filters">
       <input type="hidden" name="page" value="admin_dashboard">
+      <input type="hidden" name="filter" id="filter-value" value="all">
+      <input type="hidden" name="visitor_type" id="visitor-type-value" value="all">
       <div class="search-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
@@ -37,16 +39,34 @@ include __DIR__ . '/../includes/header.php';
         </svg>
         <input type="text" id="search-input" name="search" placeholder="Search by name, ID, contact, location..."/>
       </div>
-      <select name="filter" id="filter-select" class="filter-select">
-        <option value="all">All Time</option>
-        <option value="signed_in">Currently Signed In</option>
-        <option value="today">Today</option>
-        <option value="date_range">Date Range</option>
-      </select>
-      <span id="date-range-inputs" class="hidden">
-        <input type="date" name="date_from" id="date-from" class="date-input"/>
-        <input type="date" name="date_to" id="date-to" class="date-input"/>
-      </span>
+
+      <div class="dropdown-wrapper">
+        <button type="button" class="dropdown-btn" id="filter-btn">
+          <span id="filter-label">All Time</span>
+          <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="dropdown-menu" id="filter-menu">
+          <div class="dropdown-item" data-value="all">All Time</div>
+          <div class="dropdown-item" data-value="signed_in">Currently Signed In</div>
+          <div class="dropdown-item" data-value="signed_out">Signed Out</div>
+          <div class="dropdown-item" data-value="today">Today</div>
+          <div class="dropdown-item" data-value="this_week">This Week</div>
+          <div class="dropdown-item" data-value="this_month">This Month</div>
+        </div>
+      </div>
+
+      <div class="dropdown-wrapper">
+        <button type="button" class="dropdown-btn" id="visitor-type-btn">
+          <span id="visitor-type-label">All Visitors</span>
+          <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="dropdown-menu" id="visitor-type-menu">
+          <div class="dropdown-item" data-value="all">All Visitors</div>
+          <div class="dropdown-item" data-value="usc">USC</div>
+          <div class="dropdown-item" data-value="guest">Guest</div>
+        </div>
+      </div>
+
       <button type="submit" class="filter-btn">Search</button>
     </form>
 
@@ -58,7 +78,7 @@ include __DIR__ . '/../includes/header.php';
             <th>ID/Contact</th>
             <th>Location</th>
             <th>Sign In</th>
-            <th>Sign Out</th>
+            <th>Mark Signed Out</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -71,7 +91,7 @@ include __DIR__ . '/../includes/header.php';
     <div id="pagination-container"></div>
   </div>
 
-  <div class="footer-note">CpE Contact Tracing System · Admin Dashboard</div>
+  <div class="footer-note">USC DCpE Contact Tracing System · Admin Dashboard</div>
 </main>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>

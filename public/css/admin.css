@@ -27,8 +27,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  height: 48px;
+  padding: 12px 24px;
+  min-height: 48px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
@@ -37,12 +37,8 @@ header {
 
 .brand-badge {
   width: 34px; height: 34px;
-  background: var(--blue-600);
   border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'DM Mono', monospace;
-  font-size: 11px; font-weight: 500;
-  color: #fff;
+  object-fit: contain;
 }
 
 .brand-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }

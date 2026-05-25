@@ -14,13 +14,11 @@ function handleRegister() {
 
   const payload = {
     first_name: first,
-    middle_name: document.getElementById('reg-middle').value.trim() || null,
     last_name: last,
     barangay: document.getElementById('reg-brgy').value.trim() || null,
     city: document.getElementById('reg-city').value.trim() || null,
     province: document.getElementById('reg-prov').value.trim() || null,
-    contact_number: contact,
-    email: document.getElementById('reg-email').value.trim() || null
+    contact_number: contact
   };
 
   const idEl = document.getElementById('reg-id');

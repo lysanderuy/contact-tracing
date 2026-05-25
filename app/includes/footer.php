@@ -1,7 +1,7 @@
   </main>
   <?php if (empty($skip_footer)): ?>
   <footer>
-    <span class="f-copy">CpE Contact Tracing · University of San Carlos</span>
+    <span class="f-copy">USC DCpE Contact Tracing</span>
     <a class="f-admin" href="?page=admin_login">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="11" width="18" height="11" rx="2"/>

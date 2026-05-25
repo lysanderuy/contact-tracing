@@ -6,27 +6,28 @@ include __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="welcome">
-  <h1>Welcome to the <span>CpE Office</span></h1>
+  <h1>Welcome to the <span>DCpE Office</span></h1>
   <p>Please sign in before entering and sign out when you leave.</p>
 </div>
 
 <div class="card">
-  <div class="section-label">USC student, faculty, or staff</div>
-
   <div class="field">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="5" width="20" height="14" rx="2"/>
-      <path d="M16 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
-      <path d="M6 9h3M6 12h3M6 15h3"/>
-    </svg>
-    <input type="text" id="usc-input" placeholder="Enter your USC ID number" autocomplete="off" />
+    <label for="usc-input">USC ID Number</label>
+    <div class="field-input">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/>
+        <path d="M16 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/>
+        <path d="M6 9h3M6 12h3M6 15h3"/>
+      </svg>
+      <input type="text" id="usc-input" placeholder="e.g., 20201234" autocomplete="off" />
+    </div>
   </div>
 
   <button class="btn-main" onclick="handleUSC()">
+    Continue
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M5 12h14M12 5l7 7-7 7"/>
     </svg>
-    Continue
   </button>
 
   <div class="or"><span>or</span></div>

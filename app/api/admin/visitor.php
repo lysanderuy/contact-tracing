@@ -14,8 +14,8 @@ if (!$visitor_id) {
 
 try {
     $stmt = $conn->prepare(
-        "SELECT id, id_number, first_name, middle_name, last_name,
-                contact_number, email, barangay, city, province
+        "SELECT id, id_number, first_name, last_name,
+                contact_number, barangay, city, province
          FROM visitors WHERE id = ?"
     );
     $stmt->bind_param("i", $visitor_id);

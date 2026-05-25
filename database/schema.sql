@@ -6,13 +6,11 @@ CREATE TABLE visitors (
   id              INT PRIMARY KEY AUTO_INCREMENT,
   id_number       VARCHAR(50) UNIQUE,           -- USC ID (NULL for guests)
   first_name      VARCHAR(100) NOT NULL,
-  middle_name     VARCHAR(100),
   last_name       VARCHAR(100) NOT NULL,
   barangay        VARCHAR(100),
   city            VARCHAR(100),
   province        VARCHAR(100),
   contact_number  VARCHAR(20) NOT NULL,         -- Normalized to digits only
-  email           VARCHAR(255),
   created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 

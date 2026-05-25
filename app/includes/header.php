@@ -15,7 +15,7 @@
   <?php if (empty($skip_header)): ?>
   <header>
     <div class="brand">
-      <div class="brand-badge">CpE</div>
+      <img class="brand-badge" src="assets/dcpe_logo.png" alt="CpE Logo"/>
       <div>
         <div class="brand-name">Department of Computer Engineering</div>
         <div class="brand-sub">University of San Carlos · Cebu City</div>

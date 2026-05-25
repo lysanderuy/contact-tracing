@@ -9,7 +9,7 @@ if (!$visitor_id) {
 
 $page_title = 'Visitor Detail — CpE Contact Tracing';
 $css_files  = ['admin.css', 'visitor_detail.css'];
-$topbar_btn = ['back', '?page=admin_dashboard', '← Back to Dashboard'];
+$topbar_btn = 'logout';
 $page_js    = ['js/visitor_detail.js'];
 $skip_main  = true;
 $skip_footer = true;
@@ -17,24 +17,33 @@ include __DIR__ . '/../includes/header.php';
 ?>
 
 <main>
-  <h1 class="page-title">Visitor Details</h1>
+  <div class="page-header">
+    <h1 class="page-title">Visitor Details</h1>
+    <a href="?page=admin_dashboard" class="close-btn" title="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </a>
+  </div>
 
-  <div id="detail-loading" class="detail-loading">Loading...</div>
+  <div id="detail-loading" class="detail-loading">Loading visitor details...</div>
 
   <div id="detail-content" class="hidden">
     <div class="card">
       <div class="profile-header">
         <div class="avatar" id="visitor-avatar"></div>
         <div class="profile-info">
-          <h2 id="visitor-name"></h2>
+          <div class="name-row">
+            <h2 id="visitor-name"></h2>
+            <span id="visitor-status-badge" class="status-badge"></span>
+          </div>
           <div class="meta" id="visitor-id-type"></div>
-          <span id="visitor-status-badge" class="status-badge"></span>
         </div>
+        <div id="sign-out-container" class="profile-actions"></div>
       </div>
 
       <div class="info-grid" id="visitor-info-grid"></div>
-
-      <div id="sign-out-container"></div>
     </div>
 
     <div class="card">
