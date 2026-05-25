@@ -1,0 +1,134 @@
+/* Modal component styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: var(--bg-primary, #fff);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 420px;
+  width: 90%;
+  transform: translateY(-20px);
+  transition: transform 0.2s;
+}
+
+.modal-overlay.show .modal {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  margin: 0;
+}
+
+.modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  transition: color 0.15s;
+}
+
+.modal-close:hover svg {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 20px;
+  font-size: 14px;
+  color: var(--text-primary, #111827);
+  line-height: 1.5;
+}
+
+.modal-error {
+  color: #dc2626;
+}
+
+.modal-success {
+  color: #16a34a;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+.modal-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Sora', sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.modal-btn-primary {
+  background: var(--blue-500);
+  color: #fff;
+}
+
+.modal-btn-primary:hover {
+  background: var(--blue-400);
+}
+
+.modal-btn-primary:active {
+  transform: scale(0.985);
+}
+
+.modal-btn-secondary {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.modal-btn-secondary:hover {
+  background: var(--blue-50);
+  border-color: rgba(26,95,212,0.2);
+}
+
+.modal-btn-secondary:active {
+  transform: scale(0.985);
+}
+
+body.modal-open {
+  overflow: hidden;
+}

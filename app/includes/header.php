@@ -10,6 +10,7 @@
   <?php foreach ($css_files ?? ['home.css'] as $css): ?>
   <link rel="stylesheet" href="css/<?= htmlspecialchars($css) ?>"/>
   <?php endforeach; ?>
+  <link rel="stylesheet" href="css/modal.css"/>
 </head>
 <body>
   <?php if (empty($skip_header)): ?>

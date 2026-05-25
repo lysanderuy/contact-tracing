@@ -227,20 +227,21 @@ document.addEventListener('click', function(e) {
 });
 
 function signOutPerson(visitorId) {
-  if (!confirm('Sign out this visitor?')) return;
-  fetch('?api=visitors/sign', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ visitor_id: visitorId, action: 'sign_out' }),
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        fetchSignedIn();
-        fetchVisitors(currentPage);
-      } else {
-        alert(data.error || 'Failed to sign out');
-      }
+  appModal.confirm('Sign out this visitor?', 'Confirm', function() {
+    fetch('?api=visitors/sign', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ visitor_id: visitorId, action: 'sign_out' }),
     })
-    .catch(() => alert('System error'));
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          fetchSignedIn();
+          fetchVisitors(currentPage);
+        } else {
+          appModal.alert(data.error || 'Failed to sign out', 'Error', 'error');
+        }
+      })
+      .catch(() => appModal.alert('System error', 'Error', 'error'));
+  });
 }

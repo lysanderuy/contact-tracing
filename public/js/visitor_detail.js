@@ -68,19 +68,20 @@ function renderDetail({ visitor: v, logs, first_visit, currently_signed_in }) {
 }
 
 function signOutVisitor() {
-  if (!confirm('Sign out this visitor now?')) return;
-  fetch('?api=visitors/sign', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ visitor_id: visitorId, action: 'sign_out' }),
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        location.reload();
-      } else {
-        alert(data.error || 'Failed to sign out');
-      }
+  appModal.confirm('Sign out this visitor now?', 'Confirm', function() {
+    fetch('?api=visitors/sign', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ visitor_id: visitorId, action: 'sign_out' }),
     })
-    .catch(() => alert('System error'));
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        } else {
+          appModal.alert(data.error || 'Failed to sign out', 'Error', 'error');
+        }
+      })
+      .catch(() => appModal.alert('System error', 'Error', 'error'));
+  });
 }

@@ -11,14 +11,14 @@ function handleUSC() {
   })
   .then(res => res.json())
   .then(data => {
-    if (data.error) { alert(data.error); return; }
+    if (data.error) { appModal.alert(data.error, 'Error', 'error'); return; }
     if (data.found) {
       window.location.href = '?page=verify&visitor_id=' + data.visitor_id + '&status=' + data.status;
     } else {
       window.location.href = '?page=register&id=' + encodeURIComponent(id);
     }
   })
-  .catch(err => { console.error(err); alert('System error. Please try again.'); });
+  .catch(err => { console.error(err); appModal.alert('System error. Please try again.', 'Error', 'error'); });
 }
 
 function handleGuest() {

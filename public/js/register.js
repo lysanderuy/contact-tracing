@@ -4,11 +4,11 @@ function handleRegister() {
   const contact = normalizeContact(document.getElementById('reg-contact').value.trim());
 
   if (!first || !last) {
-    alert('First name and last name are required');
+    appModal.alert('First name and last name are required', 'Missing Fields', 'error');
     return;
   }
   if (!contact || contact.length < 10) {
-    alert('Please enter a valid contact number');
+    appModal.alert('Please enter a valid contact number', 'Invalid Contact', 'error');
     return;
   }
 
@@ -31,10 +31,10 @@ function handleRegister() {
   })
   .then(res => res.json())
   .then(data => {
-    if (data.error) { alert(data.error); return; }
+    if (data.error) { appModal.alert(data.error, 'Error', 'error'); return; }
     window.location.href = '?page=confirmation&visitor_id=' + data.visitor_id + '&action=signed_in';
   })
-  .catch(err => { console.error(err); alert('System error. Please try again.'); });
+  .catch(err => { console.error(err); appModal.alert('System error. Please try again.', 'Error', 'error'); });
 }
 
 const firstEmpty = Array.from(document.querySelectorAll('input:not([readonly])')).find(i => !i.value);

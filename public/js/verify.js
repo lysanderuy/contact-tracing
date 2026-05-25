@@ -60,9 +60,9 @@ function handleConfirm() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.error) { alert(data.error); return; }
+      if (data.error) { appModal.alert(data.error, 'Error', 'error'); return; }
       const ts = data.timestamp ? '&ts=' + encodeURIComponent(data.timestamp) : '';
       window.location.href = nextPage + ts;
     })
-    .catch(() => alert('System error. Please try again.'));
+    .catch(() => appModal.alert('System error. Please try again.', 'Error', 'error'));
 }

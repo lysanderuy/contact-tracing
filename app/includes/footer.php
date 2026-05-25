@@ -12,6 +12,7 @@
   </footer>
   <?php endif; ?>
   <script src="js/utils.js"></script>
+  <script src="js/modal.js"></script>
   <?php if (!empty($page_js)): ?>
     <?php foreach ((array)$page_js as $js): ?>
   <script src="<?= htmlspecialchars($js) ?>"></script>
