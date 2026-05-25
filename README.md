@@ -37,11 +37,21 @@ CpE Contact Tracing provides a fast way for anyone (students, guests, visitors, 
 contact-tracing/
 ├── app/
 │   ├── api/
-│   │   ├── check_user.php
-│   │   ├── register.php
-│   │   └── sign_action.php
+│   │   ├── admin/
+│   │   │   ├── signed_in.php
+│   │   │   ├── visitor.php
+│   │   │   └── visitors.php
+│   │   ├── auth/
+│   │   │   ├── login.php
+│   │   │   └── logout.php
+│   │   └── visitors/
+│   │       ├── check.php
+│   │       ├── get.php
+│   │       ├── register.php
+│   │       └── sign.php
 │   ├── includes/
 │   │   ├── api_helpers.php
+│   │   ├── auth_guard.php
 │   │   ├── footer.php
 │   │   └── header.php
 │   └── pages/
@@ -50,7 +60,6 @@ contact-tracing/
 │       ├── confirmation.php
 │       ├── guest_entry.php
 │       ├── home.php
-│       ├── logout.php
 │       ├── register.php
 │       ├── verify.php
 │       └── visitor_detail.php
@@ -68,6 +77,7 @@ contact-tracing/
 │   ├── index.php
 │   └── js/
 │       ├── admin_dashboard.js
+│       ├── admin_login.js
 │       ├── confirmation.js
 │       ├── guest_entry.js
 │       ├── home.js
@@ -75,6 +85,8 @@ contact-tracing/
 │       ├── utils.js
 │       ├── verify.js
 │       └── visitor_detail.js
+├── .github/
+│   └── workflows/
 └── README.md
 ```
 
