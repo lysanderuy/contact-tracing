@@ -7,11 +7,10 @@ require_admin();
 
 const PER_PAGE = 10;
 
-$search      = $_GET['search'] ?? '';
-$filter_type = $_GET['filter'] ?? 'all';
-$date_from   = $_GET['date_from'] ?? '';
-$date_to     = $_GET['date_to'] ?? '';
-$page        = max(1, (int) ($_GET['page'] ?? 1));
+$search       = $_GET['search'] ?? '';
+$filter_type  = $_GET['filter'] ?? 'all';
+$visitor_type = $_GET['visitor_type'] ?? 'all';
+$page         = max(1, (int) ($_GET['page'] ?? 1));
 $per_page    = PER_PAGE;
 $offset      = ($page - 1) * $per_page;
 
@@ -28,16 +27,24 @@ if ($search) {
 
 if ($filter_type === 'signed_in') {
     $where_clauses[] = "vl.sign_out IS NULL";
+} elseif ($filter_type === 'signed_out') {
+    $where_clauses[] = "vl.sign_out IS NOT NULL";
+} elseif ($filter_type === 'this_week') {
+    $where_clauses[] = "YEARWEEK(vl.sign_in) = YEARWEEK(NOW())";
+} elseif ($filter_type === 'this_month') {
+    $where_clauses[] = "MONTH(vl.sign_in) = MONTH(NOW()) AND YEAR(vl.sign_in) = YEAR(NOW())";
 }
 
 if ($filter_type === 'today') {
     $where_clauses[] = "DATE(vl.sign_in) = ?";
     $params[] = date('Y-m-d');
     $types .= 's';
-} elseif ($filter_type === 'date_range' && $date_from && $date_to) {
-    $where_clauses[] = "DATE(vl.sign_in) BETWEEN ? AND ?";
-    $params = array_merge($params, [$date_from, $date_to]);
-    $types .= 'ss';
+}
+
+if ($visitor_type === 'usc') {
+    $where_clauses[] = "v.id_number IS NOT NULL";
+} elseif ($visitor_type === 'guest') {
+    $where_clauses[] = "v.id_number IS NULL";
 }
 
 $where_sql = implode(' AND ', $where_clauses);

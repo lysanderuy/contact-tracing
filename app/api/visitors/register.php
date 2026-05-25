@@ -9,11 +9,9 @@ $first_name     = $data['first_name'] ?? null;
 $last_name      = $data['last_name'] ?? null;
 $contact_number = preg_replace('/\D/', '', $data['contact_number'] ?? '');
 $id_number      = $data['id_number'] ?? null;
-$middle_name    = $data['middle_name'] ?? null;
 $barangay       = $data['barangay'] ?? null;
 $city           = $data['city'] ?? null;
 $province       = $data['province'] ?? null;
-$email          = $data['email'] ?? null;
 
 if (!$first_name || !$last_name || !$contact_number) {
     http_response_code(400);
@@ -25,10 +23,10 @@ try {
     $conn->begin_transaction();
 
     $stmt = $conn->prepare(
-        "INSERT INTO visitors (id_number, first_name, middle_name, last_name, barangay, city, province, contact_number, email)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO visitors (id_number, first_name, last_name, barangay, city, province, contact_number)
+         VALUES (?, ?, ?, ?, ?, ?, ?)"
     );
-    $stmt->bind_param("sssssssss", $id_number, $first_name, $middle_name, $last_name, $barangay, $city, $province, $contact_number, $email);
+    $stmt->bind_param("sssssss", $id_number, $first_name, $last_name, $barangay, $city, $province, $contact_number);
     $stmt->execute();
     $visitor_id = $conn->insert_id;
 
