@@ -39,3 +39,10 @@ tr:hover { background: var(--blue-50); }
 .loading-text { font-size: 13px; color: var(--text-muted); }
 .loading-center { text-align: center; color: var(--text-muted); font-size: 13px; }
 .hidden { display: none; }
+
+.pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 16px; padding: 16px 0; }
+.page-btn { padding: 8px 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text-primary); cursor: pointer; }
+.page-btn:hover:not(:disabled) { background: var(--blue-500); color: #fff; border-color: var(--blue-500); }
+.page-btn.active { background: var(--blue-500); color: #fff; border-color: var(--blue-500); }
+.page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.page-ellipsis { color: var(--text-muted); font-size: 13px; }

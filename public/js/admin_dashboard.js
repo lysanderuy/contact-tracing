@@ -1,5 +1,8 @@
-// Restore filters from URL params on load
+let currentPage = 1;
+let totalPages = 1;
+
 const urlParams = new URLSearchParams(window.location.search);
+currentPage = parseInt(urlParams.get('page') || '1');
 document.getElementById('search-input').value   = urlParams.get('search') || '';
 document.getElementById('filter-select').value  = urlParams.get('filter') || 'all';
 document.getElementById('date-from').value       = urlParams.get('date_from') || '';
@@ -11,13 +14,49 @@ fetchVisitors();
 
 document.getElementById('filter-form').addEventListener('submit', function (e) {
   e.preventDefault();
-  fetchVisitors();
+  currentPage = 1;
+  fetchVisitors(1);
 });
 
 document.getElementById('filter-select').addEventListener('change', function () {
   toggleDateRange();
-  if (this.value !== 'date_range') fetchVisitors();
+  if (this.value !== 'date_range') {
+    currentPage = 1;
+    fetchVisitors(1);
+  }
 });
+
+function renderPagination() {
+  const container = document.getElementById('pagination-container');
+  if (!container) return;
+
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  let html = '<div class="pagination">';
+  html += `<button class="page-btn ${currentPage === 1 ? 'disabled' : ''}" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>`;
+
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+      html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      html += '<span class="page-ellipsis">...</span>';
+    }
+  }
+
+  html += `<button class="page-btn ${currentPage === totalPages ? 'disabled' : ''}" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>`;
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+function goToPage(page) {
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  fetchVisitors(page);
+}
 
 function toggleDateRange() {
   const show = document.getElementById('filter-select').value === 'date_range';
@@ -31,16 +70,22 @@ function fetchSignedIn() {
     .catch(() => {});
 }
 
-function fetchVisitors() {
+function fetchVisitors(page = 1) {
   const search     = document.getElementById('search-input').value.trim();
   const filter     = document.getElementById('filter-select').value;
   const date_from  = document.getElementById('date-from').value;
   const date_to    = document.getElementById('date-to').value;
 
-  const q = new URLSearchParams({ search, filter, date_from, date_to }).toString();
+  const q = new URLSearchParams({ search, filter, date_from, date_to, page }).toString();
   fetch('?api=admin/visitors&' + q)
     .then(res => res.json())
-    .then(data => renderVisitors(Array.isArray(data) ? data : []))
+    .then(data => {
+      const visitors = Array.isArray(data.data) ? data.data : [];
+      currentPage = data.page || 1;
+      totalPages = data.total_pages || 1;
+      renderVisitors(visitors);
+      renderPagination();
+    })
     .catch(() => {});
 }
 
@@ -102,7 +147,7 @@ function signOutPerson(visitorId) {
     .then(data => {
       if (data.success) {
         fetchSignedIn();
-        fetchVisitors();
+        fetchVisitors(currentPage);
       } else {
         alert(data.error || 'Failed to sign out');
       }

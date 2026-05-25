@@ -68,6 +68,7 @@ include __DIR__ . '/../includes/header.php';
         </tbody>
       </table>
     </div>
+    <div id="pagination-container"></div>
   </div>
 
   <div class="footer-note">CpE Contact Tracing System · Admin Dashboard</div>
